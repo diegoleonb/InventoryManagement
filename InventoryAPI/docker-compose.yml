@@ -1,0 +1,37 @@
+﻿
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: inventory-sqlserver
+    environment:
+      SA_PASSWORD: "Password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+    networks:
+      - inventory-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventory-api
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=InventoryDataBase;User Id=sa;Password=Password123;TrustServerCertificate=true;
+      - Jwt__Secret=MyNewSuperSecretKeyForJWTTokenGeneration2024!MakeItLongAndSecure
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "7000:80"
+    depends_on:
+      - sqlserver
+    networks:
+      - inventory-network
+
+volumes:
+  sqldata:
+
+networks:
+  inventory-network:
+    driver: bridge
