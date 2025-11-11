@@ -143,7 +143,7 @@ async Task InitializeDatabase(WebApplication app)
     }
     else
     {
-      Console.WriteLine("ℹ️ Database already exists");
+      Console.WriteLine("Database already exists");
     }
   }
   catch (Exception ex)

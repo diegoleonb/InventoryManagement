@@ -52,6 +52,7 @@ namespace InventoryAPI.Services
         Description = productCreateDto.Description,
         StockQuantity = productCreateDto.StockQuantity,
         Price = productCreateDto.Price,
+        PictureUrl = productCreateDto.PictureUrl,
         CategoryId = productCreateDto.CategoryId,
         CreatedByUserId = userId,
         CreatedAt = DateTime.UtcNow,
@@ -83,6 +84,7 @@ namespace InventoryAPI.Services
       product.Description = productUpdateDto.Description;
       product.StockQuantity = productUpdateDto.StockQuantity;
       product.Price = productUpdateDto.Price;
+      product.PictureUrl = productUpdateDto.PictureUrl;
       product.CategoryId = productUpdateDto.CategoryId;
       product.LastUpdatedAt = DateTime.UtcNow;
 
@@ -127,6 +129,7 @@ namespace InventoryAPI.Services
         Description = product.Description,
         StockQuantity = product.StockQuantity,
         Price = product.Price,
+        PictureUrl = product.PictureUrl,
         CategoryId = product.CategoryId,
         CategoryName = product.Category?.Name,
         CreatedAt = product.CreatedAt,
