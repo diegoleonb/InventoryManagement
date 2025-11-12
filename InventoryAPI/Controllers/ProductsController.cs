@@ -80,13 +80,12 @@ namespace InventoryAPI.Controllers
     {
       try
       {
-        var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-        var userId = _authService.GetUserIdFromToken(token);
-
-        if (!userId.HasValue)
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim))
           return Unauthorized();
 
-        var product = await _productService.CreateProductAsync(productCreateDto, userId.Value);
+        var userId = int.Parse(userIdClaim);
+        var product = await _productService.CreateProductAsync(productCreateDto, userId);
         return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
       }
       catch (Exception ex)
@@ -94,6 +93,7 @@ namespace InventoryAPI.Controllers
         return BadRequest(ex.Message);
       }
     }
+
 
     /// <summary>
     /// Updates an existing product.
