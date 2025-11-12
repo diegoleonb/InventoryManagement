@@ -1,0 +1,102 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-info">
+        <h3>{{ totalProducts }}</h3>
+        <p>Total Products</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📁</div>
+      <div class="stat-info">
+        <h3>{{ totalCategories }}</h3>
+        <p>Categories</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-info">
+        <h3>{{ lowStockProducts.length }}</h3>
+        <p>Low Stock Items</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="content-section">
+      <div class="section-header">
+        <h2>Low Stock Alert</h2>
+        <span class="badge warning">{{ lowStockProducts.length }} items</span>
+      </div>
+
+      <div class="product-grid" *ngIf="lowStockProducts.length > 0; else noLowStock">
+        <div *ngFor="let product of lowStockProducts" class="product-card">
+          <div class="product-image">
+            <img [src]="product.pictureUrl || 'assets/default-product.png'" [alt]="product.name">
+          </div>
+          <div class="product-info">
+            <h4>{{ product.name }}</h4>
+            <p class="product-description">{{ product.description | slice:0:100 }}...</p>
+            <div class="product-meta">
+              <span class="price">${{ product.price }}</span>
+              <span class="stock" [class]="getStockClass(product.stockQuantity)">
+                Stock: {{ product.stockQuantity }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noLowStock>
+        <div class="empty-state">
+          <p>All products have sufficient stock levels!</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="content-section">
+      <div class="section-header">
+        <h2>Quick Actions</h2>
+      </div>
+
+      <div class="actions-grid">
+        <a routerLink="/products" class="action-card">
+          <div class="action-icon">📦</div>
+          <h4>Manage Products</h4>
+          <p>View, add, edit or delete products</p>
+        </a>
+
+        <a routerLink="/categories" class="action-card">
+          <div class="action-icon">📁</div>
+          <h4>Manage Categories</h4>
+          <p>Organize your product categories</p>
+        </a>
+
+        <a
+          *ngIf="authService.hasRole('Operator') || authService.hasRole('Administrator')"
+          routerLink="/products/new"
+          class="action-card">
+          <div class="action-icon">➕</div>
+          <h4>Add Product</h4>
+          <p>Create a new product entry</p>
+        </a>
+
+        <a
+          *ngIf="authService.hasRole('Administrator')"
+          routerLink="/categories/new"
+          class="action-card">
+          <div class="action-icon">🆕</div>
+          <h4>Add Category</h4>
+          <p>Create a new category</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

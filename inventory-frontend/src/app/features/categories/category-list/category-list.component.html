@@ -1,0 +1,60 @@
+<section class="category-list" aria-labelledby="cat-title">
+  <header class="page-header">
+    <div class="title-wrap">
+      <h1 id="cat-title">Category Management</h1>
+      <span class="total-chip" *ngIf="!isLoading">{{ categories?.length || 0 }} total</span>
+    </div>
+
+    <button
+      *ngIf="authService.hasRole('Administrator')"
+      routerLink="/categories/new"
+      class="btn btn-primary">
+      <span>Add New Category</span>
+    </button>
+  </header>
+
+  <div *ngIf="isLoading" class="loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Loading categories...</p>
+  </div>
+
+  <div *ngIf="!isLoading && categories.length === 0" class="empty-state" aria-live="polite">
+    <div class="empty-illustration" aria-hidden="true">📂</div>
+    <p>No categories found</p>
+    <button
+      *ngIf="authService.hasRole('Administrator')"
+      routerLink="/categories/new"
+      class="btn btn-primary">
+      Create First Category
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && categories.length > 0" class="categories-grid">
+    <article *ngFor="let category of categories" class="category-card" tabindex="0">
+      <header class="category-header">
+        <h3 class="category-name">{{ category.name }}</h3>
+        <span class="product-count">
+          {{ category.productCount }} product{{ category.productCount === 1 ? '' : 's' }}
+        </span>
+      </header>
+
+      <footer class="category-actions">
+        <button
+          *ngIf="authService.hasRole('Administrator')"
+          (click)="router.navigate(['/categories/edit', category.id])"
+          class="btn btn-ghost btn-edit"
+          title="Edit">
+          Edit
+        </button>
+
+        <button
+          *ngIf="authService.hasRole('Administrator')"
+          (click)="deleteCategory(category.id)"
+          class="btn btn-danger btn-delete"
+          title="Delete">
+          Delete
+        </button>
+      </footer>
+    </article>
+  </div>
+</section>

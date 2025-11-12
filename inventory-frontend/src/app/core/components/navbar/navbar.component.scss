@@ -1,0 +1,141 @@
+:root{
+  --nav-bg: 255 255 255 / 0.72;
+  --nav-stroke: 0 0 0 / 0.08;
+  --text: #0b1220;
+  --muted: #5b6a7c;
+  --brand: #3a66ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root{
+    --nav-bg: 13 21 33 / 0.55;
+    --nav-stroke: 255 255 255 / 0.14;
+    --text: #e8edf7;
+    --muted: #a8b6c8;
+    --brand: #7aa2ff;
+  }
+}
+
+.navbar{
+  position: sticky; top: 0; z-index: 1000;
+  backdrop-filter: saturate(120%) blur(10px);
+  background: rgba(var(--nav-bg));
+  border-bottom: 1px solid rgba(var(--nav-stroke));
+  color: var(--text);
+
+  .nav-inner{
+    max-width: 1200px; margin: 0 auto;
+    padding: .6rem 1rem;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 1rem;
+  }
+}
+
+.nav-brand{
+  display:flex; align-items:center; gap:.6rem;
+  text-decoration:none; color:var(--text);
+  .brand-icon{ font-size:1.15rem }
+  .brand-text{ font-size:1.05rem; font-weight:800; letter-spacing:.2px; margin:0 }
+  &:focus-visible{ outline:2px solid var(--brand); outline-offset:4px }
+}
+
+.nav-toggle{
+  display:none;
+}
+.nav-toggle-btn{
+  display:none;
+  width:40px; height:40px; border-radius:10px;
+  border:1px solid rgba(var(--nav-stroke));
+  background:transparent; cursor:pointer;
+  justify-self:end;
+  .bar{ display:block; width:20px; height:2px; margin:5px auto; background:var(--text) }
+  &:focus-visible{ outline:2px solid var(--brand); outline-offset:4px }
+}
+
+.nav-links{
+  display:flex; align-items:center; justify-self:center; gap:.5rem;
+  list-style:none; margin:0; padding:0;
+
+  a{
+    text-decoration:none; color:var(--text);
+    padding:.5rem .75rem; border-radius:10px; font-weight:600;
+    transition: background .18s ease, color .18s ease, transform .06s ease;
+    &:hover{ background: rgba(var(--nav-stroke)); transform: translateY(-1px); }
+    &:focus-visible{ outline:2px solid var(--brand); outline-offset:4px }
+    &.active{
+      color: var(--brand);
+      background: color-mix(in oklab, var(--brand) 14%, transparent);
+    }
+  }
+}
+
+.nav-user{
+  position:relative; display:flex; align-items:center;
+
+  .user-details{
+    position:relative;
+  }
+
+  .user-btn{
+    display:flex; align-items:center; gap:.5rem;
+    border:1px solid rgba(var(--nav-stroke)); background:transparent;
+    border-radius:12px; padding:.35rem .5rem; cursor:pointer;
+    list-style:none;   /* oculta triángulo default en algunos navegadores */
+    color:var(--text);
+    &:hover{ background: rgba(var(--nav-stroke)); }
+    &:focus-visible{ outline:2px solid var(--brand); outline-offset:4px }
+  }
+
+  .avatar{
+    width:28px; height:28px; border-radius:50%;
+    display:grid; place-items:center; font-weight:800;
+    background: color-mix(in oklab, var(--brand) 38%, white);
+    color:#000;
+  }
+  .user-info{ font-weight:700 }
+  .role{ color:var(--muted); font-weight:600 }
+
+  .user-menu{
+    position:absolute; right:0; top:calc(100% + 6px);
+    min-width:180px; background: rgba(var(--nav-bg));
+    border:1px solid rgba(var(--nav-stroke));
+    border-radius:14px; padding:.4rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    animation: pop .12s ease-out both;
+  }
+
+  .user-details[open] .user-menu{ display:block }
+  .user-details:not([open]) .user-menu{ display:none }
+
+  .logout-btn{
+    width:100%; text-align:left; background:transparent; border:0;
+    padding:.6rem .7rem; border-radius:10px; cursor:pointer; color:var(--text);
+    font-weight:600;
+    &:hover{ background: rgba(var(--nav-stroke)); }
+    &:focus-visible{ outline:2px solid var(--brand); outline-offset:3px }
+  }
+}
+
+@media (max-width: 900px){
+  .navbar .nav-inner{
+    grid-template-columns: auto 1fr auto;
+  }
+  .nav-toggle-btn{
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-links{
+    position:absolute; left:0; right:0; top:100%;
+    background: rgba(var(--nav-bg));
+    border-bottom:1px solid rgba(var(--nav-stroke));
+    display:none; flex-direction:column; align-items:stretch;
+    padding:.5rem; gap:.25rem;
+  }
+  .nav-toggle:checked ~ .nav-links{
+    display:flex;
+  }
+  .nav-user{ justify-self:end; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+}
+@keyframes pop{ from{ opacity:0; transform:translateY(-2px) } to{ opacity:1; transform:translateY(0) } }

@@ -1,0 +1,33 @@
+<nav class="navbar" role="navigation" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" routerLink="/">
+      <span class="brand-icon" aria-hidden="true">🧊</span>
+      <h1 class="brand-text">Inventory Management</h1>
+    </a>
+
+    <input id="nav-toggle" type="checkbox" class="nav-toggle" aria-hidden="true" />
+    <label class="nav-toggle-btn" for="nav-toggle" aria-label="Toggle navigation">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </label>
+
+    <ul class="nav-links" *ngIf="authService.isLoggedIn()">
+      <li><a routerLink="/dashboard" routerLinkActive="active" >Dashboard</a></li>
+      <li><a routerLink="/products"  routerLinkActive="active">Products</a></li>
+      <li><a routerLink="/categories" routerLinkActive="active">Categories</a></li>
+    </ul>
+
+    <div class="nav-user" *ngIf="authService.isLoggedIn()">
+      <details class="user-details">
+        <summary class="user-btn">
+          <span class="user-info">
+            {{ authService.getCurrentUser()?.username }}
+            <span class="role">({{ authService.getCurrentUser()?.roleName }})</span>
+          </span>
+        </summary>
+        <div class="user-menu" role="menu">
+          <button role="menuitem" class="logout-btn" (click)="logout()">Logout</button>
+        </div>
+      </details>
+    </div>
+  </div>
+</nav>

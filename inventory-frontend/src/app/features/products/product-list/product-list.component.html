@@ -1,0 +1,103 @@
+<section class="product-list" aria-labelledby="pl-title">
+  <header class="page-header">
+    <div class="title-wrap">
+      <h1 id="pl-title">Product Management</h1>
+      <span class="total-chip" *ngIf="!isLoading">{{ filteredProducts?.length || 0 }} total</span>
+    </div>
+
+    <button
+      *ngIf="authService.hasRole('Operator') || authService.hasRole('Administrator')"
+      routerLink="/products/new"
+      class="btn btn-primary">
+      <span>Add New Product</span>
+    </button>
+  </header>
+
+  <div class="filters" role="region" aria-label="Filters">
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        placeholder="Search products..."
+        class="search-input"
+        aria-label="Search products">
+      <button
+        type="button"
+        class="clear-btn"
+        *ngIf="searchTerm"
+        (click)="searchTerm=''; onSearch()"
+        aria-label="Clear search">
+        ✖
+      </button>
+    </div>
+
+    <div class="category-filter">
+      <select
+        [(ngModel)]="selectedCategory"
+        (change)="onCategoryChange()"
+        class="select-input"
+        aria-label="Filter by category">
+        <option value="all">All Categories</option>
+        <option *ngFor="let category of getCategories()" [value]="category">
+          {{ category }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Loading products...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length === 0" class="empty-state" aria-live="polite">
+    <div class="empty-illustration" aria-hidden="true">📭</div>
+    <p>No products found</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length > 0" class="products-grid">
+    <article *ngFor="let product of filteredProducts" class="product-card" tabindex="0">
+      <div class="product-image">
+        <img [src]="product.pictureUrl || 'assets/default-product.png'" [alt]="product.name">
+        <span class="stock-badge" [class]="getStockClass(product.stockQuantity)">
+          {{ product.stockQuantity }} in stock
+        </span>
+      </div>
+
+      <div class="product-content">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-description">{{ product.description }}</p>
+
+        <div class="product-meta">
+          <span class="category-chip">{{ product.categoryName }}</span>
+          <span class="price">{{ product.price | currency:'USD':'symbol':'1.0-2' }}</span>
+        </div>
+
+        <div class="product-details">
+          <small>Created: {{ product.createdAt | date }}</small>
+          <small>By: {{ product.createdByUser }}</small>
+        </div>
+
+        <div class="product-actions">
+          <button
+            *ngIf="authService.hasRole('Operator') || authService.hasRole('Administrator')"
+            (click)="router.navigate(['/products/edit', product.id])"
+            class="btn btn-ghost btn-edit"
+            title="Edit">
+            Edit
+          </button>
+
+          <button
+            *ngIf="authService.hasRole('Administrator')"
+            (click)="deleteProduct(product.id)"
+            class="btn btn-danger btn-delete"
+            title="Delete">
+            Delete
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
