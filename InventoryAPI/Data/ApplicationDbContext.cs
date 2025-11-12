@@ -173,7 +173,7 @@ namespace InventoryAPI.Data
                {
                  Id = 4,
                  Name = "SAMSUNG Gamer 49 Pulgadas Odyssey",
-                 Description = "Get your head in the game with the 49 inch Odyssey G9, which matches the curve of the human eye, for maximum immersion and minimal eye strain, and the screen space of two 27",
+                 Description = "Get your head in the game with the 49 inch Odyssey G9",
                  StockQuantity = 40,
                  Price = 349.99m,
                  PictureUrl = "https://images.samsung.com/is/image/samsung/p6pim/co/ls49cg950enxza/gallery/co-odyssey-g9-g95c-ls49cg950enxza-542518742",
